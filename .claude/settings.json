@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(pnpm lint)",
+      "Bash(pnpm typecheck)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test tests/*)",
+      "Bash(pnpm test:e2e)",
+      "Bash(pnpm test:e2e tests/e2e/*)",
+      "Bash(pnpm build)",
+      "Bash(pnpm check)",
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git log)",
+      "Bash(git log *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Edit(./.env)",
+      "Write(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.production)",
+      "Bash(cat .env)",
+      "Bash(cat ./.env)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf *)",
+      "Bash(sudo rm *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push --force-with-lease *)",
+      "Bash(git push *--force*)",
+      "Bash(git push * -f*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "bash",
+            "timeout": 30,
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint-edited-file.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
